@@ -13,18 +13,14 @@ export const languageStore = defineStore('languageStore', () => {
 
   const getlanguages = async (params) => {
     const { data } = await api.get(base_url, { params })
-    console.log(data)
     languages.value = [...data.data]
     languageCount.value = data.count
   }
 
   const addlanguage = async (language) => {
     const { data } = await api.post(base_url, language)
-    console.log(data)
-
     languages.value = [data, ...languages.value]
     languageCount.value += 1
-
     notification.setNotif(true, 'Yangi ma`lumot qo`shildi', 'success')
   }
 
@@ -36,9 +32,7 @@ export const languageStore = defineStore('languageStore', () => {
   }
 
   const savelanguage = async (language) => {
-    console.log(language)
     const { data } = await api.put(`${base_url}`, language)
-    console.log(data)
     languages.value = languages.value.map((item) => {
       if (item._id == data._id) return data
       return item

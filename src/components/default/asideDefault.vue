@@ -83,12 +83,10 @@
           </li>
 
           <li class="mt-auto">
-            <router-link :to="{ name: 'settings' }" :class="[
-              'settings' == route.name
-                ? 'bg-gray-800 text-white'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800',
-              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-            ]">
+            <router-link :to="{ name: 'settings' }" :class="['settings' == route.name
+              ? 'bg-gray-800 text-white'
+              : 'text-gray-400 hover:text-white hover:bg-gray-800',
+              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
               <Cog6ToothIcon class="h-6 w-6 shrink-0" aria-hidden="true" />
               Sozlamalar
             </router-link>
@@ -100,13 +98,14 @@
 </template>
 <script setup>
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { DocumentTextIcon } from '@heroicons/vue/20/solid';
 import { Cog6ToothIcon, HomeIcon, XMarkIcon, ChartBarIcon, FolderIcon } from '@heroicons/vue/24/outline'
 
 const navigation = [
   { name: 'Bosh sahifa', to: 'dashboard', icon: HomeIcon },
-  { name: 'Categories', to: 'categories', icon: ChartBarIcon, current: false },
-  { name: 'News', to: 'news', icon: FolderIcon, current: false },
-  { name: 'Page', to: 'pages', icon: FolderIcon, current: false },
+  { name: 'Toifalar', to: 'categories', icon: ChartBarIcon, current: false },
+  { name: 'Yangiliklar', to: 'news', icon: DocumentTextIcon, current: false },
+  { name: 'Sahifalar', to: 'pages', icon: FolderIcon, current: false },
   // { name: 'Documents', to: 'documents', icon: DocumentDuplicateIcon, current: false },
   // { name: 'Reports', to: 'reports', icon: ChartPieIcon, current: false }
 ]

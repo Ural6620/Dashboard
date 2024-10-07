@@ -10,6 +10,7 @@ import headPart from '@/components/default/headPart.vue'
 import defaultModal from '@/components/default/defaultModal.vue'
 import defaultInput from '@/components/default/defaultInput.vue'
 import defaultSelect from '@/components/default/defaultSelect.vue'
+import dublicatSelect from './components/default/dublicatSelect.vue'
 import defaultCheckbox from '@/components/default/defaultCheckbox.vue'
 import dialogModal from '@/components/default/dialogModal.vue'
 import phoneMaska from '@/components/default/phoneMaska.vue'
@@ -22,6 +23,7 @@ app.component('headPart', headPart)
 app.component('defaultModal', defaultModal)
 app.component('defaultInput', defaultInput)
 app.component('defaultSelect', defaultSelect)
+app.component('dublicatSelect', dublicatSelect)
 app.component('defaultCheckbox', defaultCheckbox)
 app.component('phoneMaska', phoneMaska)
 

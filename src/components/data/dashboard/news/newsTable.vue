@@ -1,4 +1,4 @@
-<template>
++<template>
   <div class="-mx-4 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg overflow-hidden">
 
     <table class="min-w-full divide-y divide-gray-300">

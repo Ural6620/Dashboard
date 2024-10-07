@@ -21,8 +21,8 @@
           :error="v$.translate.title.$invalid && v$.translate.title.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
-        <uploadPhoto label="Toifa rasmi" placeholder="Toifa rasmini yuklang" v-model="data.img" name="img"
-          base_url="api/category/upload" @change="data.img = $event" />
+        <uploadPhoto label="Toifa rasmi" placeholder="Toifa rasmini yuklang" v-model="data.img"
+          base_url="api/category/upload" />
       </div>
       <div class="space-y-2 mt-4">
         <default-select v-model="data.translate.language" name="language" label="Tilni tanlang"

@@ -39,7 +39,12 @@ import { getCookie } from 'typescript-cookie'
 import { ref } from 'vue'
 
 const url = import.meta.env.VITE_URL;
-const props = defineProps(['label', 'placeholder', 'base_url', 'modelValue']);
+const props = defineProps({
+  label: String,
+  placeholder: String,
+  modelValue: Array,
+  base_url: String
+})
 const images = ref(props.modelValue || []);
 const emit = defineEmits(['update:modelValue']);
 const base_url = props.base_url;

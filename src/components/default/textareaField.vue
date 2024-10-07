@@ -11,7 +11,7 @@
     />
   </div>
 </template>
-<script setup lang="ts">
+<script setup>
 const model = defineModel()
 defineProps(['label', 'placeholder'])
 </script>

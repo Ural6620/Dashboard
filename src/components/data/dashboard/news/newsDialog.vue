@@ -21,12 +21,12 @@
           :error="v$.translate.title.$invalid && v$.translate.title.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
-        <uploadPhoto label="Toifa rasmi" placeholder="Toifa rasmini yuklang" v-model="data.img" name="img"
+        <uploadPhoto label="Toifa rasmi" placeholder="Toifa rasmini yuklang" v-model="data.img"
           base_url="api/category/upload" />
       </div>
       <div class="space-y-2 mt-4">
-        <default-select v-model="data.translate.language" name="language" label="Tilni tanlang"
-          :options="options.languages || []" option_title="title"
+        <dublicat-select v-model="data.category" name="category" label="Toifani tanlang"
+          :options="options?.categories || []"
           :error="v$.translate.language.$invalid && v$.translate.language.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
@@ -59,17 +59,12 @@ const data = ref({
   slug: '',
   file: [],
   category: '',
-  translates: [
-    {
-      _id: '',
-      title: '',
-      text: '',
-      discription: '',
-      language: '',
-    }
-  ]
-   
-  
+  translate: {
+    title: '',
+    text: '',
+    discription: '',
+    language: '',
+  }
 })
 
 import { useVuelidate } from '@vuelidate/core'
