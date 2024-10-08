@@ -18,7 +18,7 @@ export const categoryStore = defineStore('categoryStore', () => {
 
   const addCategory = async (category) => {
     const { data } = await api.post(base_url, category)
-    categories.value = [data, ...categories.value]
+    categories.value = [...categories.value, data]
     categoryCount.value += 1
     notification.setNotif(true, 'Yangi ma`lumot qo`shildi', 'success')
   }

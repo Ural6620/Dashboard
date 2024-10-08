@@ -19,7 +19,7 @@ export const languageStore = defineStore('languageStore', () => {
 
   const addlanguage = async (language) => {
     const { data } = await api.post(base_url, language)
-    languages.value = [data, ...languages.value]
+    languages.value = [...languages.value, data]
     languageCount.value += 1
     notification.setNotif(true, 'Yangi ma`lumot qo`shildi', 'success')
   }

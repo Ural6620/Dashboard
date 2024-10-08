@@ -32,11 +32,10 @@
       @change="onFileChange" />
   </div>
 </template>
-
 <script setup>
 import { PaperClipIcon } from '@heroicons/vue/24/solid'
 import { getCookie } from 'typescript-cookie'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const url = import.meta.env.VITE_URL;
 const props = defineProps({
@@ -45,10 +44,15 @@ const props = defineProps({
   modelValue: Array,
   base_url: String
 })
-const images = ref(props.modelValue || []);
 const emit = defineEmits(['update:modelValue']);
+const images = ref([]);
 const base_url = props.base_url;
+
 import api from '@/helpers/api'
+
+watch(() => props.modelValue, (newVal) => {
+  images.value = [...newVal]; // modelValue o'zgarsa, images ga o'zlashtiriladi
+}, { immediate: true }); // Immediate: True bo'lganda dastlab ham ishlaydi
 
 const onFileChange = (event) => {
   const files = event.target?.files;
@@ -88,7 +92,4 @@ const uploadFile = async (file, image) => {
     console.log(error);
   }
 }
-
 </script>
-
-<style lang=""></style>

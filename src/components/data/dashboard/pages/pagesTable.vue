@@ -5,22 +5,25 @@
       <thead>
         <tr>
           <th scope="col" class="th-first"></th>
-          <th scope="col" class="th">Toifa nomi</th>
+          <th scope="col" class="th truncate">Sahifa nomi</th>
           <th scope="col" class="th">Tarjimalar</th>
+          <th scope="col" class="th">Sahifa ma'lumoti</th>
+          <th scope="col" class="th ">Sahifa haqida</th>
           <th scope="col" class="th">Rasmlar</th>
           <th scope="col" class="th" width="150">Vaqti</th>
           <th scope="col" class="th-last" width="150"></th>
         </tr>
       </thead>
       <tbody class="bg-white">
-        <tr v-for="(item, itemIdx) in categories" :key="item._id" :class="itemIdx % 2 === 0 ? undefined : 'bg-gray-50'">
+        <tr v-for="(item, itemIdx) in pages" :key="item._id" :class="itemIdx % 2 === 0 ? undefined : 'bg-gray-50'"
+          @click.stop="handleMain(item._id)">
           <td class="td-first">
             {{ itemIdx + 1 }}
           </td>
           <td class="td">{{ item.translates?.at(0)?.title || '' }}</td>
           <td class="td">
             <div class="flex items-start gap-2">
-              <button @click="edit(item._id, lang._id)" :class="`${item?.translates?.some((tr) => tr.language == lang._id)
+              <button @click.stop="edit(item._id, lang._id)" :class="`${item?.translates?.some((tr) => tr.language == lang._id)
                 ? 'success-btn'
                 : 'edit-btn'
                 } w-auto p-2 px-3`" v-for="lang of options?.languages" :key="lang._id">
@@ -28,10 +31,12 @@
               </button>
             </div>
           </td>
+          <td class="td">{{ item.translates?.at(0)?.text || '' }}</td>
+          <td class="td">{{ item.translates?.at(0)?.description || '' }}</td>
           <td class="td">{{ item.img?.length || 0 }}</td>
           <td class="td">{{ convertDate(item.createdAt, 'full') }}</td>
           <td class="td-last">
-            <button type="button" class="danger-btn size-10 ml-auto" @click="confirmRemove(item._id)">
+            <button type="button" class="danger-btn size-10 ml-auto" @click.stop="confirmRemove(item._id)">
               <TrashIcon class="size-5" />
             </button>
           </td>
@@ -50,33 +55,33 @@ const toggle = ref(false)
 const limit = ref(30)
 defineProps(['options'])
 
-import { categoryStore } from '@/stores/data/categories';
+import { pageStore } from '@/stores/data/pages';
 import { storeToRefs } from 'pinia'
-const store = categoryStore();
-const { categories } = storeToRefs(store);
+const store = pageStore();
+const { pages } = storeToRefs(store);
 
 const getData = async () => {
-  await store.getCategories({
+  await store.getPages({
     limit: limit.value
   })
 }
 
 import { useFullStore } from '@/stores/usefull/modal'
 const usefull = useFullStore()
+
 const edit = (id, lang) => {
   usefull.setToggle(true, id, lang)
 }
 
 const _id = ref('')
 const confirmRemove = (id) => {
-  console.log(id)
   _id.value = id
   toggle.value = true
 }
 
 const remove = async (answer) => {
   if (answer) {
-    await store.removeCategory(_id.value)
+    await store.removePage(_id.value)
   }
   close()
 }
@@ -84,6 +89,32 @@ const remove = async (answer) => {
 const close = () => {
   toggle.value = false
 }
+
+// import { useRouter } from 'vue-router';
+// const router = useRouter();
+
+
+// function handleMain(id) {
+//   store.getNewsId(id)
+//   // Yangilik
+//   router.addRoute('defaultLayout', {
+//     path: '/Yangilik/' + id,
+//     name: 'Yangilik/' + id,
+//     component: () => import('@/views/dashboard/news/childNews.vue'),
+//     meta: {
+//       title: 'Yangilik/' + id,
+//       toggle: false,
+//       toggleTitle: ''
+//     }
+//   });
+
+//   // Yo'naltirish
+//   router.push({ name: 'Yangilik/' + id, });
+// }
+
+
+
+
 
 onMounted(() => {
   getData()

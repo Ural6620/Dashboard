@@ -1,5 +1,5 @@
-+<template>
-  <div class="-mx-4 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg overflow-hidden">
+<template>
+  <div class="-mx-4 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg overflow-auto">
 
     <table class="min-w-full divide-y divide-gray-300">
       <thead>
@@ -16,7 +16,8 @@
         </tr>
       </thead>
       <tbody class="bg-white">
-        <tr v-for="(item, itemIdx) in news" :key="item._id" :class="itemIdx % 2 === 0 ? undefined : 'bg-gray-50'">
+        <tr v-for="(item, itemIdx) in news" :key="item._id" :class="itemIdx % 2 === 0 ? undefined : 'bg-gray-50'"
+          @click.stop="handleMain(item._id)">
           <td class="td-first">
             {{ itemIdx + 1 }}
           </td>
@@ -24,7 +25,7 @@
           <td class="td">{{ item?.category?.translates?.at(0)?.title || '' }}</td>
           <td class="td">
             <div class="flex items-start gap-2">
-              <button @click="edit(item._id, lang._id)" :class="`${item?.translates?.some((tr) => tr.language == lang._id)
+              <button @click.stop="edit(item._id, lang._id)" :class="`${item?.translates?.some((tr) => tr.language == lang._id)
                 ? 'success-btn'
                 : 'edit-btn'
                 } w-auto p-2 px-3`" v-for="lang of options?.languages" :key="lang._id">
@@ -32,12 +33,12 @@
               </button>
             </div>
           </td>
-          <td class="td">{{ item.images?.length || 0 }}</td>
+          <td class="td">{{ item.img?.length || 0 }}</td>
           <td class="td">{{ item.file?.length || 0 }}</td>
           <td class="td">{{ item.views }}</td>
           <td class="td">{{ convertDate(item.createdAt, 'full') }}</td>
           <td class="td-last">
-            <button type="button" class="danger-btn size-10 ml-auto" @click="confirmRemove(item._id)">
+            <button type="button" class="danger-btn size-10 ml-auto" @click.stop="confirmRemove(item._id)">
               <TrashIcon class="size-5" />
             </button>
           </td>
@@ -90,6 +91,32 @@ const remove = async (answer) => {
 const close = () => {
   toggle.value = false
 }
+
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+
+function handleMain(id) {
+  store.getNewsId(id)
+  // Yangilik
+  router.addRoute('defaultLayout', {
+    path: '/Yangilik/' + id,
+    name: 'Yangilik/' + id,
+    component: () => import('@/views/dashboard/news/childNews.vue'),
+    meta: {
+      title: 'Yangilik/' + id,
+      toggle: false,
+      toggleTitle: ''
+    }
+  });
+
+  // Yo'naltirish
+  router.push({ name: 'Yangilik/' + id, });
+}
+
+
+
+
 
 onMounted(() => {
   getData()

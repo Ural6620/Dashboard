@@ -18,28 +18,19 @@
       </div>
       <div class="space-y-2 mt-4">
         <default-input v-model="data.slug" name="slug" label="Yangilik slugi"
-          :error="v$.translate.title.$invalid && v$.translate.title.$dirty" />
+          :error="v$.slug.$invalid && v$.slug.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
         <default-textarea v-model="data.translate.text" name="text" label="Yangilik texti"
-          :error="v$.translate.discription.$invalid && v$.translate.discription.$dirty" />
+          :error="v$.translate.text.$invalid && v$.translate.text.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
-        <default-textarea v-model="data.translate.discription" name="discription" label="Yangilik haqida"
-          :error="v$.translate.discription.$invalid && v$.translate.discription.$dirty" />
+        <default-textarea v-model="data.translate.description" name="description" label="Yangilik haqida"
+          :error="v$.translate.description.$invalid && v$.translate.description.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
         <upload-photo label="Yangilik rasmi" placeholder="Yangilik rasmini yuklang" v-model="data.img"
           base_url="api/news/upload" />
-      </div>
-      <div class="space-y-2 mt-4">
-        <upload-file label="Yangilik fayli" placeholder="Yangilik faylini yuklang" v-model="data.file"
-          base_url="api/news/upload" />
-      </div>
-      <div class="space-y-2 mt-4">
-        <dublicat-select v-model="data.category" name="category" label="Toifani tanlang"
-          :options="options?.categories || []"
-          :error="v$.translate.language.$invalid && v$.translate.language.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
         <default-select v-model="data.translate.language" name="language" label="Tilni tanlang"
@@ -59,7 +50,6 @@ import { storeToRefs } from 'pinia';
 
 import { DialogPanel, DialogTitle } from '@headlessui/vue';
 import uploadPhoto from '@/components/default/uploadPhoto.vue';
-import uploadFile from '@/components/default/uploadFile.vue';
 import { XMarkIcon } from '@heroicons/vue/20/solid';
 import { useFullStore } from '@/stores/usefull/modal';
 const usefull = useFullStore();
@@ -69,12 +59,10 @@ defineProps(['options']);
 const data = ref({
   img: [],
   slug: '',
-  file: [],
-  category: '',
   translate: {
     title: '',
     text: '',
-    discription: '',
+    description: '',
     language: '',
   }
 })
@@ -83,26 +71,25 @@ import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators';
 const rules = {
   slug: { required },
-  category: { required },
   translate: {
     title: { required },
     text: { required },
-    discription: { required },
+    description: { required },
     language: { required },
   }
 }
 
 const v$ = useVuelidate(rules, data);
 const edit = ref(false);
-import { newsStore } from '@/stores/data/news'
-const store = newsStore();
+import { pageStore } from '@/stores/data/pages'
+const store = pageStore();
 
 
 const send = async () => {
   v$.value.$touch();
   if (!v$.value.$invalid) {
-    if (edit.value) await store.saveNews({ ...data.value });
-    else await store.addNews({ ...data.value });
+    if (edit.value) await store.savePage({ ...data.value });
+    else await store.addPages({ ...data.value });
     console.log(data.value);
     close();
   } else {
@@ -111,9 +98,9 @@ const send = async () => {
 }
 
 watch(() => id?.value, async () => {
-  console.log('kuzatmoqda')
+  console.log('kuzat Pagesni')
   if (id?.value?.length > 0 && lang?.value?.length > 0) {
-    const res = await store.getNewsId(id.value, lang.value);
+    const res = await store.getPage(id.value, lang.value);
     console.log(res.data);
     edit.value = true;
     data.value = {
@@ -121,12 +108,10 @@ watch(() => id?.value, async () => {
       _id: id.value,
       img: res.data?.img || [],
       slug: res.data?.slug || '',
-      file: res.data?.file || [],
-      category: res.data?.category || '',
       translate: {
         title: res.data?.translate?.title || '',
         text: res.data?.translate?.text || '',
-        discription: res.data?.translate?.discription || '',
+        description: res.data?.translate?.description || '',
         language: res.data?.translate?.language || '',
       }
     }
@@ -137,13 +122,10 @@ watch(() => toggle.value, () => {
   data.value = {
     img: [],
     slug: '',
-    file: [],
-    category: '',
-
     translate: {
       title: '',
       text: '',
-      discription: '',
+      description: '',
       language: '',
     }
   }

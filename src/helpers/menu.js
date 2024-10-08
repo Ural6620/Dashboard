@@ -31,7 +31,7 @@ export const links = [
   {
     path: 'pages',
     name: 'pages',
-    component: () => import('@/views/dashboard/calendar/indexCalendar.vue'),
+    component: () => import('@/views/dashboard/pages/indexPages.vue'),
     meta: {
       title: 'Pages',
       toggle: true,

@@ -9,6 +9,7 @@ import router from './router'
 import headPart from '@/components/default/headPart.vue'
 import defaultModal from '@/components/default/defaultModal.vue'
 import defaultInput from '@/components/default/defaultInput.vue'
+import defaultTextarea from '@/components/default/defaultTextarea.vue'
 import defaultSelect from '@/components/default/defaultSelect.vue'
 import dublicatSelect from './components/default/dublicatSelect.vue'
 import defaultCheckbox from '@/components/default/defaultCheckbox.vue'
@@ -22,6 +23,7 @@ app.component('dialogModal', dialogModal)
 app.component('headPart', headPart)
 app.component('defaultModal', defaultModal)
 app.component('defaultInput', defaultInput)
+app.component('defaultTextarea', defaultTextarea)
 app.component('defaultSelect', defaultSelect)
 app.component('dublicatSelect', dublicatSelect)
 app.component('defaultCheckbox', defaultCheckbox)

@@ -1,114 +1,92 @@
 <template>
-  <div class="block mb-3 text-sm font-medium leading-6 text-gray-900">{{ label }}</div>
-  <label v-if="!model" type="button" label="photo" for="photo"
-    class="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 gap-2">
-    <div
-      class="flex justify-start items-center flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2 p-2 rounded bg-blue-100">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-        class="flex-grow-0 flex-shrink-0 w-5 h-5 relative" preserveAspectRatio="xMidYMid meet">
-        <path fill-rule="evenodd" clip-rule="evenodd"
-          d="M6 2C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V16C4 16.5304 4.21071 17.0391 4.58579 17.4142C4.96086 17.7893 5.46957 18 6 18H14C14.5304 18 15.0391 17.7893 15.4142 17.4142C15.7893 17.0391 16 16.5304 16 16V7.414C15.9999 6.88361 15.7891 6.37499 15.414 6L12 2.586C11.625 2.2109 11.1164 2.00011 10.586 2H6ZM11 8C11 7.73478 10.8946 7.48043 10.7071 7.29289C10.5196 7.10536 10.2652 7 10 7C9.73478 7 9.48043 7.10536 9.29289 7.29289C9.10536 7.48043 9 7.73478 9 8V10H7C6.73478 10 6.48043 10.1054 6.29289 10.2929C6.10536 10.4804 6 10.7348 6 11C6 11.2652 6.10536 11.5196 6.29289 11.7071C6.48043 11.8946 6.73478 12 7 12H9V14C9 14.2652 9.10536 14.5196 9.29289 14.7071C9.48043 14.8946 9.73478 15 10 15C10.2652 15 10.5196 14.8946 10.7071 14.7071C10.8946 14.5196 11 14.2652 11 14V12H13C13.2652 12 13.5196 11.8946 13.7071 11.7071C13.8946 11.5196 14 11.2652 14 11C14 10.7348 13.8946 10.4804 13.7071 10.2929C13.5196 10.1054 13.2652 10 13 10H11V8Z"
-          fill="#1D4ED8"></path>
-      </svg>
-    </div>
-    <div class="flex flex-col justify-center items-start flex-grow relative">
-      <p class="self-stretch flex-grow-0 flex-shrink-0 w-[344px] text-sm text-left text-gray-900">
-        Выберите файл
-      </p>
-      <p class="self-stretch flex-grow-0 flex-shrink-0 w-[344px] text-xs text-left text-gray-400">
-        PDF, .exc, jpeg, jpg, png, doc, docx
-      </p>
-    </div>
-  </label>
-  <div v-if="model" class="flex flex-col gap-3 justify-start items-start mt-2 relative">
-    <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-2.5"
-      v-for="(doc, index) of model" :key="index">
-      <img :src="`${url}/${doc}`" alt="" class="flex-grow-0 flex-shrink-0 w-9 h-9 relative rounded bg-gray-200" />
-
-      <div class="flex flex-col justify-center items-start flex-grow-0 flex-shrink-0 relative gap-1 text-xs">
-        <p class="flex-grow-0 flex-shrink-0 font-medium text-left text-gray-900">
-          {{ doc.split('files/product/').join('') }}
-        </p>
-        <button type="button" @click="removePhoto(index)" class="text-red-600">
-          Удалить товар
-        </button>
+  <div class="block text-sm font-medium leading-6 text-gray-900">{{ label }}</div>
+  <div class="mt-2">
+    <label type="button" label="file" for="file"
+      class="relative w-full rounded-lg flex-col border-2 border-dashed border-gray-300 p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 flex items-center gap-3 justify-center">
+      <div class="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2">
+        <PaperClipIcon class="size-6 text-gray-400" />
+        <span class="text-sm font-medium text-blue-500">{{ placeholder }}</span>
       </div>
-    </div>
-    <label type="button" label="photo" for="photo"
-      class="flex justify-center items-center relative overflow-hidden gap-1 px-[11px] text-blue-600 hover:bg-blue-600 hover:text-white white-invert fill-blue-600 py-[7px] rounded bg-blue-100 text-xs font-medium text-left">
-      <img src="@/assets/blueplus.svg?url" alt="" />
-      <p class="flex-grow-0 flex-shrink-0">Добавить ещё</p>
-    </label>
-  </div>
 
-  <input type="file" name="" id="photo" class="hidden" ref="fileinput" @change="onFileChange" />
+      <div v-if="files.length" class="flex flex-col gap-2">
+        <div v-for="(file, index) in files" :key="index" class="flex justify-between gap-4 items-center flex-1">
+
+          <p class="text-sm font-medium text-gray-900">{{ file?.name }}</p>
+          <p class="text-xs font-medium text-gray-400">({{ file?.size?.toFixed(4) }} МБ)</p>
+
+          <button type="button" @click.stop="removeFile(index)">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M10 18C12.1217 18 14.1566 17.1571 15.6569 15.6569C17.1571 14.1566 18 12.1217 18 10C18 7.87827 17.1571 5.84344 15.6569 4.34315C14.1566 2.84285 12.1217 2 10 2C7.87827 2 5.84344 2.84285 4.34315 4.34315C2.84285 5.84344 2 7.87827 2 10C2 12.1217 2.84285 14.1566 4.34315 15.6569C5.84344 17.1571 7.87827 18 10 18ZM7 9C6.73478 9 6.48043 9.10536 6.29289 9.29289C6.10536 9.48043 6 9.73478 6 10C6 10.2652 6.10536 10.5196 6.29289 10.7071C6.48043 10.8946 6.73478 11 7 11H13C13.2652 11 13.5196 10.8946 13.7071 10.7071C13.8946 10.5196 14 10.2652 14 10C14 9.73478 13.8946 9.48043 13.7071 9.29289C13.5196 9.10536 13.2652 9 13 9H7Z"
+                fill="#DC2626"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </label>
+    <input type="file" accept="file/*" name="file" id="file" multiple class="hidden" ref="fileinput"
+      @change="onFileChange" />
+  </div>
 </template>
 <script setup>
-import axios from 'axios'
-import { getCookie } from 'typescript-cookie'
-import { ref } from 'vue'
-const url = import.meta.env.VITE_URL
-const model = defineModel()
-defineProps(['label', 'placeholder'])
-const image = ref('')
-const size = ref(0)
+import { ref, watch } from 'vue'
+import { getCookie } from 'typescript-cookie';
 
-// const filename = (url) => {
-//   let arr = url.split('files/product/').join('').split('.')
 
-//   return {
-//     name: arr.slice(0, arr.length - 1).join('.'),
-//     ext: arr.slice(arr.length - 1).toString()
-//   }
-// }
+const props = defineProps({
+  label: String,
+  placeholder: String,
+  modelValue: Array,
+  base_url: String
+})
+const emit = defineEmits(['update:modelValue']);
+const files = ref([]);
+const base_url = props.base_url;
+
+import api from '@/helpers/api';
+
+watch(() => props.modelValue, (newVal) => {
+  files.value = [...newVal];
+}, { immediate: true });
 
 const onFileChange = (event) => {
-  const file = event.target?.files[0]
-  if (file) {
-    console.log(file)
-    size.value = file.size / 1024 / 1024
-    image.value = file.name
-    uploadFile(file)
+  const files = event.target?.files;
+  if (files) {
+    Array.from(files).forEach(file => {
+      const data = {
+        name: file.name,
+        size: file.size / 1024 / 1024,
+      };
+      uploadFile(file, data);
+    });
   }
 }
 
-const removePhoto = async (index) => {
-  if (model.value) {
-    await axios.delete(`${url}/file`, {
-      headers: {
-        Authorization: `Bearer ${getCookie('lavita-token')}`,
-        'Content-type': 'application/json'
-      },
-      data: {
-        filePath: model.value[index]
-      }
-    })
-    model.value.splice(index, 1)
-  }
+
+const removeFile = (index) => {
+  files.value.splice(index, 1);
+  emit('update:modelValue', files.value);
 }
 
-const uploadFile = async (file) => {
+const uploadFile = async (file, data) => {
   try {
-    const formData = new FormData()
-    formData.append('file', file)
+    const formData = new FormData();
+    formData.append('file', file);
 
-    const response = await axios.post(`${url}/product/upload`, formData, {
+    const response = await api.post(`${base_url}`, formData, {
       headers: {
         Authorization: `Bearer ${getCookie('lavita-token')}`,
         'Content-Type': 'multipart/form-data'
       }
-    })
-    if (response.status == 201) {
-      console.log(response.data?.file, model.value)
-      if (model.value) {
-        model.value.push(response.data?.file)
-      } else {
-        model.value = [response.data?.file]
-      }
+    });
+    if (response.status == 200) {
+      data.path = response.data;
+      files.value.push(data);
+      emit('update:modelValue', files.value);
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 </script>
-<style lang=""></style>
