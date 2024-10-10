@@ -18,7 +18,7 @@
       </div>
       <div class="space-y-2 mt-4">
         <default-input v-model="data.slug" name="slug" label="Toifa slugi"
-          :error="v$.translate.title.$invalid && v$.translate.title.$dirty" />
+          :error="v$.slug.$invalid && v$.slug.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
         <upload-photo label="Toifa rasmi" placeholder="Toifa rasmini yuklang" v-model="data.img"

@@ -18,11 +18,11 @@
       </div>
       <div class="space-y-2 mt-4">
         <default-input v-model="data.slug" name="slug" label="Yangilik slugi"
-          :error="v$.translate.title.$invalid && v$.translate.title.$dirty" />
+          :error="v$.slug.$invalid && v$.slug.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
         <default-textarea v-model="data.translate.text" name="text" label="Yangilik texti"
-          :error="v$.translate.discription.$invalid && v$.translate.discription.$dirty" />
+          :error="v$.translate.text.$invalid && v$.translate.text.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
         <default-textarea v-model="data.translate.discription" name="discription" label="Yangilik haqida"
@@ -38,8 +38,7 @@
       </div>
       <div class="space-y-2 mt-4">
         <dublicat-select v-model="data.category" name="category" label="Toifani tanlang"
-          :options="options?.categories || []"
-          :error="v$.translate.language.$invalid && v$.translate.language.$dirty" />
+          :options="options?.categories || []" :error="v$.category.$invalid && v$.category.$dirty" />
       </div>
       <div class="space-y-2 mt-4">
         <default-select v-model="data.translate.language" name="language" label="Tilni tanlang"
